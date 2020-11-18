@@ -1,0 +1,22 @@
+-----------------------put this in a .ps1 file
+# create password variable after reading from powershell encoded password stored in a text file.
+$password = Get-Content "Microsoft.Powershell.Core\FileSystem :: \\RemotepathtoCredentialFile" | ConvertTo-SecureString; $login = "domain\ID"
+# create credential object using Login and Password
+$credential = new-object -typename System.Management.Automation.PSCredential -argumentlist $login, $password
+# using credential variable, create a remote session
+$remotesession = new-pssession -comuptername NAMEOFCOMPUTERNoQuotes -authentication credssp -credential $credential
+# invoke this command
+Invoke-Command -Session $remotession -ScriptBlock {PathOfBatchFileNoQuotes}
+------------------------------------------------------------
+
+invoke the ps1 file you created with this command
+Powershell -ExecutionPolicy Bypass -File "path of ps1 file"
+
+------
+How to create credential file
+1. Start PowerShell ISE on the remote computer where you want to trigger the batch
+run this command
+$credential = Get-Credential
+$credential.Password | ConvertFrom-SecureString | Set-Content C:Mypassword.txt
+
+Rename and Save the MyPassword.txt file at appropriate location
